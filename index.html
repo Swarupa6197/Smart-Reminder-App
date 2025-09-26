@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Task Dashboard</h2>
+
+<div class="filters">
+  <label for="filter">Filter by status:</label>
+  <select id="filter" onchange="filterTasks()">
+    <option value="All">All</option>
+    <option value="Pending">Pending</option>
+    <option value="Overdue">Overdue</option>
+    <option value="Completed">Completed</option>
+  </select>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Due Date</th>
+      <th>Category</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="taskTable">
+    {% for task in tasks %}
+      <tr data-status="{{ task[6] }}">
+        <td>{{ task[1] }}</td>
+        <td>{{ task[2] }}</td>
+        <td>{{ task[3] }}</td>
+        <td>{{ task[4] }}</td>
+        <td>{{ task[5] }}</td>
+        <td>{{ task[6] }}</td>
+        <td>
+          {% if task[6] != "Completed" %}
+<form action="{{ url_for('complete_task', task_id=task[0]) }}" method="POST" style="display:inline;">
+  <button type="submit">✅ Mark as Done</button>
+</form>
+          {% else %}
+            ✔️
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
